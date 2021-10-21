@@ -1,0 +1,23 @@
+{
+  "name": "pancakeswap-bot-trade",
+  "version": "1.0.0",
+  "description": "Bot trade for pancakeswap",
+  "main": "src/app.ts",
+  "repository": "https://github.com/reegiss/pancakeswap-bot-trade.git",
+  "author": "Regis Araujo Melo",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./bin/app.js",
+    "dev": "ts-node ./src/app.ts"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.1",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.3.0",
+    "nodemon": "^2.0.12"
+  }
+}
