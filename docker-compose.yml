@@ -1,0 +1,77 @@
+version: '3.7'
+
+services:
+  pancake-bot:
+    container_name: pancake-bot
+    build:
+      context: ./
+      target: dev-stage
+      # target: production-stage
+    networks:
+      - internal
+    volumes:
+      - ./config:/srv/config
+      - ./app:/srv/app
+      - ./public:/srv/public
+      - ./migrations:/srv/migrations
+    env_file:
+      - .env
+    restart: unless-stopped
+    environment:
+      - PANCAKE_MODE=test
+      # - PANCAKE_MODE=live
+      - PANCAKE_REDIS_HOST=pancake-redis
+      - PANCAKE_REDIS_PORT=6379
+      - PANCAKE_REDIS_PASSWORD=secretp422
+    ports:
+      - 8080:80
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1G'
+
+  pancake-redis:
+    container_name: pancake-redis
+    image: redis:6.2
+    sysctls:
+      net.core.somaxconn: 1024
+    restart: unless-stopped
+    networks:
+      - internal
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command:
+      redis-server /usr/local/etc/redis/redis.conf --requirepass secretp422
+
+  pancake-mongo:
+    container_name: pancake-mongo
+    image: mongo:3.2.20-jessie
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - mongo_data:/data/db
+
+  pancake-mongo-express:
+    container_name: pancake-mongo-express
+    image: mongo-express:0.54
+    restart: unless-stopped
+    networks:
+      - internal
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: pancake-mongo
+
+networks:
+  internal:
+    driver: bridge
+    # driver_opts:
+    #     com.docker.network.driver.mtu: 1442
+
+volumes:
+  redis_data:
+  mongo_data:
