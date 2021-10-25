@@ -1,0 +1,17 @@
+{
+    "mode": "test",
+    "slack": {
+        "enabled": false
+    },
+    "redis": {
+        "host": "pancake-redis",
+        "port": 6379,
+        "password": "",
+        "db": 0
+    },
+    "mongo": {
+        "host": "pancake-mongo",
+        "port": 27017,
+        "database": "pancake-bot"
+    }
+}
